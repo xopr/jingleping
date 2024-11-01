@@ -1,6 +1,6 @@
 run this:
 
-`g++ main.cpp -o pingle; while (true); do sudo ./pingle 2001:610:1908:a000::0; done`
+`g++ main.cpp -o pingle; while (true); do sudo ./pingle 2001:610:1908:a000::0 600 350; done`
 
 TODO
 ----

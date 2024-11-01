@@ -24,16 +24,19 @@ int main(int argc, char *argv[]) {
 
     uint8_t* img = stbi_load("image.png", &width, &height, &channels, 4);
 
-    std::cout << "W:" << width << ", H:" << height << " CH:" << channels << std::endl;
-
     if (img == NULL)
     {
         std::cerr << "Failed to load image.png" << std::endl;
         return 1;
     }
 
-    const uint16_t xOffset = 600;
-    const uint16_t yOffset = 350;
+    if (argc != 4) {
+        std::cerr << "Usage: " << argv[0] << " <IPv6 address> <xOffset> <yOffset>" << std::endl;
+        return 1;
+    }
+
+    const uint16_t xOffset = std::stoi(argv[2]); // was: 600
+    const uint16_t yOffset = std::stoi(argv[3]); // was: 350
 
     if ( xOffset + width > 1920 )
     {
@@ -46,14 +49,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-
-
-
-    if (argc != 2) {
-        std::cerr << "Usage: " << argv[0] << " <IPv6 address>" << std::endl;
-        return 1;
-    }
-
     // Resolve target IPv6 address
     struct sockaddr_in6 target_addr{};
     target_addr.sin6_family = AF_INET6;
@@ -62,6 +57,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    std::cout << "W:" << width
+              << ", H:" << height
+            //   << " CH:" << channels
+              << " @ " << xOffset
+              << ", " << yOffset
+              << std::endl;
 
 #ifndef SIMULATE
     // Set timeout for socket receive
@@ -172,7 +173,7 @@ int main(int argc, char *argv[]) {
 
             // inet_ntop(AF_INET6, &(target_addr.sin6_addr), ip6str, INET6_ADDRSTRLEN);
             // std::cout << "ICMPv6 Echo Request sent to " << ip6str << std::endl;
-            std::cout << ".";
+            // std::cout << ".";
 
             // Receive ICMPv6 echo reply
             char buffer[128];
